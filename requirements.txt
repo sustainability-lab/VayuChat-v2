@@ -1,0 +1,13 @@
+streamlit==1.32.2
+pandas==1.5.3
+python-dotenv==1.0.0
+google-genai
+streamlit_feedback
+seaborn
+matplotlib
+numpy
+statsmodels
+scikit-learn
+huggingface_hub
+Pillow
+plotly

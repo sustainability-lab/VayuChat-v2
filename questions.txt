@@ -1,0 +1,30 @@
+Show PM2.5 levels across India on a map
+Which city has the highest average PM2.5 in 2023?
+Plot yearly PM2.5 trends from 2020 to 2024
+Compare PM2.5 across seasons
+Rank top 10 most polluted cities
+Which cities exceed the WHO PM2.5 guideline of 15 µg/m³?
+Map the top 20 most polluted cities in 2023
+Show monthly PM2.5 trends for Delhi
+Compare PM2.5 between Delhi, Mumbai, and Kolkata
+Show pollution change from 2020 to 2023 on a map
+Plot PM2.5 vs PM10 correlation
+Does wind speed affect PM2.5 levels? Show a chart
+Compare weekday vs weekend pollution levels
+Which NCAP cities achieved the best PM2.5 reduction?
+Rank all states by average PM10 levels
+How does rainfall affect PM2.5? Show a chart
+Compare north vs south India PM2.5 in a plot
+Map of NO2 levels across Maharashtra
+Show the correlation between temperature and PM2.5
+Plot NCAP funding by city
+Which month has the highest pollution in Mumbai?
+Show seasonal PM10 variation as a box plot
+Table of cities with PM2.5 above India standard of 60
+Chart PM2.5 trends comparing Delhi and Mumbai
+Does humidity above 80% help reduce pollution?
+Which NCAP cities still exceed WHO guidelines?
+Map pollution change for PM10 between 2019 and 2024
+Show yearly ozone trend for Karnataka
+Impact of temperature on PM2.5 levels
+Geographic distribution of SO2 across India

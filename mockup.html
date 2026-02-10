@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VayuChat - Clean Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #3b82f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-left: 0.5rem;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .model-select {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            font-size: 0.875rem;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .quick-prompt {
+            padding: 0.75rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .quick-prompt:hover {
+            background: #e0f2fe;
+            border-color: #0ea5e9;
+        }
+
+        .dataset-info {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .dataset-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .workflow-steps {
+            display: flex;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 2rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .step.active {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .step.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .step-number {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .step.active .step-number {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #22c55e;
+            color: white;
+        }
+
+        .step-arrow {
+            margin: 0 1rem;
+            color: #9ca3af;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 180px);
+        }
+
+        .messages {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 2rem;
+        }
+
+        .message.user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message.assistant {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+        }
+
+        .message.user .message-content {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .message.assistant .message-content {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .code-container {
+            margin: 1rem 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .code-header:hover {
+            background: #e2e8f0;
+        }
+
+        .code-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .toggle-text {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .code-block.expanded {
+            display: block;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .code-action-btn {
+            padding: 0.25rem 0.75rem;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #6b7280;
+        }
+
+        .code-action-btn:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+        .chart-container {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .answer-container {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .answer-text {
+            font-size: 1.125rem;
+            color: #1e293b;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .answer-highlight {
+            background: #fef3c7;
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .context-info {
+            background: #f1f5f9;
+            border-left: 4px solid #3b82f6;
+            padding: 0.75rem 1rem;
+            margin: 1rem 0;
+            font-size: 0.875rem;
+            color: #475569;
+        }
+
+        .feedback-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .feedback-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .feedback-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .feedback-btn {
+            padding: 0.5rem 0.75rem;
+            background: transparent;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .feedback-btn:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        .feedback-btn.active.thumbs-up {
+            background: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+        }
+
+        .feedback-btn.active.thumbs-down {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            padding: 0.375rem 0.75rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #475569;
+        }
+
+        .quick-action-btn:hover {
+            background: #e0f2fe;
+            border-color: #0ea5e9;
+            color: #0c4a6e;
+        }
+
+        .input-container {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .send-button {
+            padding: 0.75rem 1.5rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .send-button:hover {
+            background: #2563eb;
+        }
+
+        .send-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #9ca3af;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">V</div>
+            <div>
+                <span class="title">VayuChat</span>
+                <span class="subtitle">Environmental Data Analysis</span>
+            </div>
+        </div>
+        <div class="controls">
+            <select class="model-select">
+                <option>gpt-4o-mini</option>
+                <option>claude-3.5-sonnet</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dataset Info</div>
+                <div class="dataset-info">
+                    <h4>PM2.5 Air Quality Data</h4>
+                    <p><strong>Time Range:</strong> Jan 2023 - Dec 2023</p>
+                    <p><strong>Locations:</strong> 15 cities in Gujarat</p>
+                    <p><strong>Records:</strong> 13,140 measurements</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Quick Queries</div>
+                <div class="quick-prompt">Which month had highest pollution?</div>
+                <div class="quick-prompt">Which city has worst air quality?</div>
+                <div class="quick-prompt">Show annual PM2.5 average</div>
+                <div class="quick-prompt">Compare winter vs summer pollution</div>
+                <div class="quick-prompt">List all cities by pollution level</div>
+                <div class="quick-prompt">Plot monthly average PM2.5 for 2023</div>
+                <div class="quick-prompt">Show seasonal pollution patterns</div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="workflow-steps">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <span>Natural Language Query</span>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step completed">
+                    <div class="step-number">2</div>
+                    <span>Code Generation</span>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step active">
+                    <div class="step-number">3</div>
+                    <span>Visualization</span>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="messages">
+                    <!-- Chart Response Example -->
+                    <div class="message user">
+                        <div class="message-content">
+                            Plot the monthly average PM2.5 for the year 2023
+                        </div>
+                    </div>
+
+                    <div class="message assistant">
+                        <div class="message-content">
+                            <p>Here's the monthly average PM2.5 plot for 2023:</p>
+                            
+                            <div class="code-container">
+                                <div class="code-header" onclick="toggleCode(this)">
+                                    <div class="code-title">Generated Python Code</div>
+                                    <div class="toggle-text">Click to expand</div>
+                                </div>
+                                <div class="code-block">
+                                    <pre>import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load and filter data for 2023
+df_2023 = df[df['year'] == 2023]
+
+# Calculate monthly averages
+monthly_avg = df_2023.groupby('month')['pm25'].mean()
+
+# Create the plot
+plt.figure(figsize=(12, 6))
+plt.plot(monthly_avg.index, monthly_avg.values, 
+         marker='o', linewidth=3, markersize=8, 
+         color='#3b82f6')
+
+plt.title('Monthly Average PM2.5 - Gujarat 2023', fontsize=16, fontweight='bold')
+plt.xlabel('Month', fontsize=12)
+plt.ylabel('PM2.5 (ug/m3)', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()</pre>
+                                </div>
+                                <div class="code-actions">
+                                    <button class="code-action-btn" onclick="copyCode(event)">Copy Code</button>
+                                    <button class="code-action-btn" onclick="downloadCode(event)">Download</button>
+                                </div>
+                            </div>
+
+                            <div class="chart-container">
+                                <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border: 2px solid #e2e8f0; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                                    <!-- Chart Title -->
+                                    <div style="position: absolute; top: 20px; font-weight: bold; font-size: 16px; color: #1e293b;">Monthly Average PM2.5 - Gujarat 2023</div>
+                                    
+                                    <!-- Chart Area -->
+                                    <svg width="500" height="200" style="margin-top: 20px;">
+                                        <!-- Grid -->
+                                        <defs>
+                                            <pattern id="grid" width="50" height="40" patternUnits="userSpaceOnUse">
+                                                <path d="M 50 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+                                            </pattern>
+                                        </defs>
+                                        <rect width="100%" height="100%" fill="url(#grid)" />
+                                        
+                                        <!-- WHO Guideline -->
+                                        <line x1="60" y1="160" x2="460" y2="160" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,5"/>
+                                        <text x="455" y="155" font-size="10" fill="#ef4444" text-anchor="end">WHO (15)</text>
+                                        
+                                        <!-- Data Line -->
+                                        <polyline points="60,30 100,50 140,80 180,85 220,95 260,110 300,170 340,155 380,150 420,75 460,35 500,45" 
+                                                 fill="none" stroke="#3b82f6" stroke-width="3"/>
+                                        
+                                        <!-- Data Points -->
+                                        <circle cx="60" cy="30" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="100" cy="50" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="140" cy="80" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="180" cy="85" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="220" cy="95" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="260" cy="110" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="300" cy="170" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="340" cy="155" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="380" cy="150" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="420" cy="75" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="460" cy="35" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        <circle cx="500" cy="45" r="4" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                                        
+                                        <!-- Month Labels -->
+                                        <text x="60" y="195" font-size="11" fill="#64748b" text-anchor="middle">Jan</text>
+                                        <text x="100" y="195" font-size="11" fill="#64748b" text-anchor="middle">Feb</text>
+                                        <text x="140" y="195" font-size="11" fill="#64748b" text-anchor="middle">Mar</text>
+                                        <text x="180" y="195" font-size="11" fill="#64748b" text-anchor="middle">Apr</text>
+                                        <text x="220" y="195" font-size="11" fill="#64748b" text-anchor="middle">May</text>
+                                        <text x="260" y="195" font-size="11" fill="#64748b" text-anchor="middle">Jun</text>
+                                        <text x="300" y="195" font-size="11" fill="#64748b" text-anchor="middle">Jul</text>
+                                        <text x="340" y="195" font-size="11" fill="#64748b" text-anchor="middle">Aug</text>
+                                        <text x="380" y="195" font-size="11" fill="#64748b" text-anchor="middle">Sep</text>
+                                        <text x="420" y="195" font-size="11" fill="#64748b" text-anchor="middle">Oct</text>
+                                        <text x="460" y="195" font-size="11" fill="#64748b" text-anchor="middle">Nov</text>
+                                        <text x="500" y="195" font-size="11" fill="#64748b" text-anchor="middle">Dec</text>
+                                        
+                                        <!-- Y-axis labels -->
+                                        <text x="50" y="175" font-size="11" fill="#64748b" text-anchor="end">0</text>
+                                        <text x="50" y="135" font-size="11" fill="#64748b" text-anchor="end">40</text>
+                                        <text x="50" y="95" font-size="11" fill="#64748b" text-anchor="end">80</text>
+                                        <text x="50" y="35" font-size="11" fill="#64748b" text-anchor="end">100</text>
+                                    </svg>
+                                    
+                                    <!-- Axis Labels -->
+                                    <div style="position: absolute; bottom: 10px; font-size: 12px; color: #64748b;">Month</div>
+                                    <div style="position: absolute; left: 15px; top: 50%; transform: rotate(-90deg); font-size: 12px; color: #64748b;">PM2.5 (ug/m3)</div>
+                                </div>
+                            </div>
+
+                            <div class="context-info">
+                                The chart shows highest PM2.5 levels in winter months with January at 95.2 and November at 91.7. Lowest levels occur during monsoon season with July at 25.1. All months exceed WHO annual guideline of 15.
+                            </div>
+
+                            <div class="quick-actions">
+                                <button class="quick-action-btn">Compare with 2022</button>
+                                <button class="quick-action-btn">Show by city</button>
+                                <button class="quick-action-btn">Seasonal breakdown</button>
+                            </div>
+
+                            <div class="feedback-container">
+                                <span class="feedback-label">Was this helpful?</span>
+                                <div class="feedback-buttons">
+                                    <button class="feedback-btn thumbs-up" onclick="giveFeedback(this, 'up')">👍 Helpful</button>
+                                    <button class="feedback-btn thumbs-down" onclick="giveFeedback(this, 'down')">👎 Not helpful</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Direct Answer Example -->
+                    <div class="message user">
+                        <div class="message-content">
+                            Which month had the highest PM2.5 pollution in 2023?
+                        </div>
+                    </div>
+
+                    <div class="message assistant">
+                        <div class="message-content">
+                            <div class="answer-container">
+                                <div class="answer-text">
+                                    <span class="answer-highlight">January 2023</span> had the highest PM2.5 pollution with an average concentration of <span class="answer-highlight">95.2</span>.
+                                </div>
+                                <div class="context-info">
+                                    This value is 6.3 times higher than the WHO annual guideline of 15 and represents typical winter pollution patterns in Gujarat.
+                                </div>
+                            </div>
+
+                            <div class="quick-actions">
+                                <button class="quick-action-btn">Compare with other months</button>
+                                <button class="quick-action-btn">Show January city breakdown</button>
+                                <button class="quick-action-btn">Winter pollution causes</button>
+                            </div>
+
+                            <div class="feedback-container">
+                                <span class="feedback-label">Was this helpful?</span>
+                                <div class="feedback-buttons">
+                                    <button class="feedback-btn thumbs-up" onclick="giveFeedback(this, 'up')">👍 Helpful</button>
+                                    <button class="feedback-btn thumbs-down" onclick="giveFeedback(this, 'down')">👎 Not helpful</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- List Answer Example -->
+                    <div class="message user">
+                        <div class="message-content">
+                            Which cities in Gujarat have the worst air quality?
+                        </div>
+                    </div>
+
+                    <div class="message assistant">
+                        <div class="message-content">
+                            <div class="answer-container">
+                                <div class="answer-text">
+                                    <strong>1. Ahmedabad:</strong> <span class="answer-highlight">68.3</span><br>
+                                    <strong>2. Surat:</strong> <span class="answer-highlight">61.7</span><br>
+                                    <strong>3. Vadodara:</strong> <span class="answer-highlight">58.9</span><br>
+                                    <strong>4. Rajkot:</strong> <span class="answer-highlight">52.4</span><br>
+                                    <strong>5. Gandhinagar:</strong> <span class="answer-highlight">48.1</span>
+                                </div>
+                                <div class="context-info">
+                                    All cities exceed WHO guidelines by 3-4x. Industrial activity and vehicular emissions are primary contributors.
+                                </div>
+                            </div>
+
+                            <div class="quick-actions">
+                                <button class="quick-action-btn">Show seasonal variation by city</button>
+                                <button class="quick-action-btn">Compare with national averages</button>
+                                <button class="quick-action-btn">Plot city comparison chart</button>
+                            </div>
+
+                            <div class="feedback-container">
+                                <span class="feedback-label">Was this helpful?</span>
+                                <div class="feedback-buttons">
+                                    <button class="feedback-btn thumbs-up" onclick="giveFeedback(this, 'up')">👍 Helpful</button>
+                                    <button class="feedback-btn thumbs-down" onclick="giveFeedback(this, 'down')">👎 Not helpful</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <input type="text" class="input-field" placeholder="Ask me anything about air quality data..." />
+                        <button class="send-button">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleCode(header) {
+            const codeBlock = header.nextElementSibling;
+            const toggleText = header.querySelector('.toggle-text');
+            
+            if (codeBlock.classList.contains('expanded')) {
+                codeBlock.classList.remove('expanded');
+                toggleText.textContent = 'Click to expand';
+            } else {
+                codeBlock.classList.add('expanded');
+                toggleText.textContent = 'Click to collapse';
+            }
+        }
+
+        function copyCode(event) {
+            event.stopPropagation();
+            const codeBlock = event.target.closest('.code-container').querySelector('.code-block pre');
+            navigator.clipboard.writeText(

@@ -1,0 +1,21 @@
+I have a pandas dataframe data of PM2.5 and PM10.
+* The columns are 'Timestamp', 'station', 'PM2.5', 'PM10', 'address', 'city', 'latitude', 'longitude',and 'state'.
+* Frequency of data is daily.
+* `pollution` generally means `PM2.5`.
+* You already have df, so don't read the csv file 
+* Available libraries: pandas, matplotlib, numpy, seaborn, plotly, geopandas, statsmodels, scikit-learn
+* Don't print anything, but save result in a variable `answer` and make it global.
+* Unless explicitly mentioned, don't consider the result as a plot.
+* PM2.5 guidelines: India: 60, WHO: 15.
+* PM10 guidelines: India: 100, WHO: 50.
+* If result is a plot, show the India and WHO guidelines in the plot.
+* If result is a plot make it in tight layout, save it and save path in `answer`. Example: `answer='plot.png'`. Use uuid to save the plot.
+* If result is a plot, rotate x-axis tick labels by 45 degrees,
+* If result is not a plot, save it as a string in `answer`. Example: `answer='The city is Mumbai'`
+* I have a geopandas.geodataframe india containining the coordinates required to plot Indian Map with states.
+* If the query asks you to plot on India Map, use that geodataframe to plot and then add more points as per the requirements using the similar code as follows : v = ax.scatter(df['longitude'], df['latitude']). If the colorbar is required, use the following code : plt.colorbar(v)
+* If the query asks you to plot on India Map plot the India Map in Beige color 
+* Whenever you do any sort of aggregation, report the corresponding standard deviation, standard error and the number of data points for that aggregation.
+* Whenever you're reporting a floating point number, round it to 2 decimal places.
+* Always report the unit of the data. Example: `The average PM2.5 is 45.67 µg/m³`.
+* If a colorbar is plotted and it represents air quality, use `Reds` cmap.
